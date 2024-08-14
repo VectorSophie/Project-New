@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>>
+    <h1 class = "text-center mb-4">게시판 </h1>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="list-group" id="postList">
+                    <button type="button" class="list-group-item list-group-item-action active" onclick="showPost(1)">날개</button>
+                    <button type="button" class="list-group-item list-group-item-action" onclick="showPost(2)">죄와 벌</button>
+                    <button type="button" class="list-group-item list-group-item-action" onclick="showPost(3)">모비딕-또는 고래</button>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div id="postContent">
+                    <h3 id="postTitle">게시물 제목</h3>
+                    <p id="postDate">작성일: YYYY-MM-DD</p>
+                    <p id="postBody">여기에 게시물 내용이 표시됩니다.</p>
+                    <button type="button" class="btn btn-danger" onclick="deletePost()">삭제</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyModal">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modifyModal" tabindex="-1" aria-labelledby="modifyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifyModalLabel">게시물 수정</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="modifyTitle" class="form-label">제목</label>
+                            <input type="text" class="form-control" id="modifyTitle" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modifyContent" class="form-label">내용</label>
+                            <textarea class="form-control" id="modifyContent" rows="4"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="saveChanges()">저장</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const posts = {
+            1: { title: "날개", date: "1936-09-01", content: "'박제(剝製)가 되어 버린 천재'를 아시오? 나는 유쾌하오. 이런 때 연애까지가 유쾌하오. 육신이 흐느적흐느적하도록 피로했을 때만 정신이 은화처럼 맑소. 니코틴이 내 횟배 앓는 뱃속으로 스미면 머릿속에 으레 백지가 준비되는 법이오. 그 위에다 나는 위트와 파라독스를 바둑 포석처럼 늘어 놓소. 가공할 상식의 병이오." },
+            2: { title: "죄와 벌", date: "1866-12-08", content: "В начале июля, в чрезвычайно жаркое время, под вечер, один молодой человек вышел из своей каморки, которую нанимал от жильцов в С — м переулке, на улицу и медленно, как бы в нерешимости, отправился к К — ну мосту." },
+            3: { title: "모비딕-또는 고래", date: "1851-12-14", content: "Call me Ishmael. Some years ago–never mind how long precisely– having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world." }
+        };
+        let currentPostId = 1;
+        function showPost(postId) {
+            currentPostId = postId;
+            document.getElementById('postTitle').innerText = posts[postId].title;
+            document.getElementById('postDate').innerText = "작성일: " + posts[postId].date;
+            document.getElementById('postBody').innerText = posts[postId].content;
+
+            const buttons = document.querySelectorAll('#postList .list-group-item');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            buttons[postId - 1].classList.add('active');
+        }
+        function deletePost() {
+            alert('게시물이 삭제되었습니다.');
+        }
+        function saveChanges() {
+            const newTitle = document.getElementById('modifyTitle').value;
+            const newContent = document.getElementById('modifyContent').value;
+
+            posts[currentPostId].title = newTitle;
+            posts[currentPostId].content = newContent;
+
+            showPost(currentPostId);
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modifyModal'));
+            modal.hide();
+        }
+        document.getElementById('modifyModal').addEventListener('show.bs.modal', function () {
+            document.getElementById('modifyTitle').value = posts[currentPostId].title;
+            document.getElementById('modifyContent').value = posts[currentPostId].content;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<canvas
+  id="barChart"
+  width="100"
+  height="800"
+  style="border: 1px solid #ccc"
+></canvas>
+<script>
+  var canvas = document.getElementById("barChart");
+  var ctx = canvas.getContext("2d");
+  var data = [30, 90, 150, 100, 50];
+  drawBarChart(data);
+
+  function drawBarChart(data) {
+    var barWidth = 50;
+    var barSpacing = 20;
+    var startX = 20;
+    var startY = canvas.height - 20;
+    var maxValue = Math.max.apply(null, data);
+    for (var i = 0; i < data.length; i++) {
+      var barHeight = (data[i] / maxValue) * (canvas.height - 40);
+      ctx.fillRect(startX, startY - barHeight, barWidth, barHeight);
+      startX += barWidth + barSpacing;
+    }
+  }
+</script>
